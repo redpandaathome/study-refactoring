@@ -19,23 +19,18 @@ function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice[0].customer})\n`;
-  const format = new Intl.NumberFormat("en-Us", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format;
 
   for (let perf of invoice[0].performances) {
     //✨
     volumeCredits += volumeCreditsFor(perf);
     //print
     //✨변수인라인
-    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     }석)\n`;
     totalAmount += amountFor(perf);
   }
-  result += `총액: ${format(totalAmount / 100)}`;
+  result += `총액: ${usd(totalAmount)}`;
   result += `적립포인트: ${volumeCredits}점\n`;
   return result;
 }
@@ -60,6 +55,14 @@ function amountFor(aPerformance) {
       throw new Error(`알 수 없는 장르: ${playFor(aPerformance).type}`);
   }
   return result;
+}
+
+function usd(aNumber){
+  return new Intl.NumberFormat("en-Us", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(aNumber/100);
 }
 
 function volumeCreditsFor(aPerformance) {
