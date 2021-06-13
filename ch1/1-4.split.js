@@ -16,22 +16,16 @@ let invoice = [
 ];
 
 function statement(invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice[0].customer})\n`;
 
   for (let perf of invoice[0].performances) {
-    //✨
-    volumeCredits += volumeCreditsFor(perf);
-    //print
-    //✨변수인라인
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     }석)\n`;
-    totalAmount += amountFor(perf);
   }
-  result += `총액: ${usd(totalAmount)}`;
-  result += `적립포인트: ${volumeCredits}점\n`;
+
+  result += `총액: ${usd(totalAmount())}`;
+  result += `적립포인트: ${totalVolumeCredits()}점\n`;
   return result;
 }
 
@@ -55,6 +49,26 @@ function amountFor(aPerformance) {
       throw new Error(`알 수 없는 장르: ${playFor(aPerformance).type}`);
   }
   return result;
+}
+
+function totalAmount(){
+  let result = 0;
+  for (let perf of invoice[0].performances) {
+    result += amountFor(perf);
+  }
+  return result
+}
+
+//반복문을 쪼개서 성능이 느려지지 않을까? ->이 정도 중복은 영향이 미미하다.
+//리팩터링에 대한 성능 문제는 특별한 경우가 아니라면 일단 무시하라
+function totalVolumeCredits(){
+  let result = 0;
+  //separate...
+  for (let perf of invoice[0].performances) {
+    //✨
+    result += resultFor(perf);
+  }
+  return result
 }
 
 function usd(aNumber){
