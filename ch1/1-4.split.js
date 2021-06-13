@@ -18,9 +18,15 @@ let invoice = [
 function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice[0].customer;
-  statementData.performances = invoice[0].performances;
+  statementData.performances = invoice[0].performances.map(enrichPerformance);
 
   return renderPlainText(statementData)
+
+  //✨ js shallow copy
+  function enrichPerformance(aPerformance){
+    const result = Object.assign({}, aPerformance)
+    return result;
+  }
 
   function renderPlainText(data){
     let result = `청구 내역 (고객명: ${data.customer})\n`;
@@ -59,7 +65,7 @@ function statement(invoice, plays) {
     
     function totalAmount(){
       let result = 0;
-      for (let perf of invoice[0].performances) {
+      for (let perf of data.performances) {
         result += amountFor(perf);
       }
       return result
@@ -70,7 +76,7 @@ function statement(invoice, plays) {
     function totalVolumeCredits(){
       let result = 0;
       //separate...
-      for (let perf of invoice[0].performances) {
+      for (let perf of data.performances) {
         //✨
         result += amountFor(perf);
       }
