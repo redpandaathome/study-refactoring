@@ -16,6 +16,11 @@ let invoice = [
 ];
 
 function statement(invoice, plays) {
+  const statementData = {};
+  return renderPlainText(statementData, invoice, plays)
+}
+
+function renderPlainText(data, invoice, plays){
   let result = `청구 내역 (고객명: ${invoice[0].customer})\n`;
 
   for (let perf of invoice[0].performances) {
@@ -66,7 +71,7 @@ function totalVolumeCredits(){
   //separate...
   for (let perf of invoice[0].performances) {
     //✨
-    result += resultFor(perf);
+    result += amountFor(perf);
   }
   return result
 }
