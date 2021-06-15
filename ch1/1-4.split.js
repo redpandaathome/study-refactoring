@@ -28,7 +28,16 @@ function statement(invoice, plays) {
     const result = Object.assign({}, aPerformance)
     result.play = playFor(result);
     result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
     console.log("...", result)
+    return result;
+  }
+
+  function volumeCreditsFor(aPerformance) {
+    let result = 0;
+    result += Math.max(aPerformance.audience - 30, 0);
+    if ("comedy" == aPerformance.type)
+      result += Math.floor(aPerformance.audience / 5);
     return result;
   }
 
@@ -77,7 +86,16 @@ function statement(invoice, plays) {
     result += `적립포인트: ${totalVolumeCredits()}점\n`;
     return result;
 
-    
+    //반복문을 쪼개서 성능이 느려지지 않을까? ->이 정도 중복은 영향이 미미하다.
+    //리팩터링에 대한 성능 문제는 특별한 경우가 아니라면 일단 무시하라
+    function totalVolumeCredits(){
+      let result = 0;
+      //separate...
+      for (let perf of data.performances) {
+        result += perf.volumeCredits;
+      }
+      return result
+    }
     
     function totalAmount(){
       let result = 0;
@@ -87,17 +105,7 @@ function statement(invoice, plays) {
       return result
     }
     
-    //반복문을 쪼개서 성능이 느려지지 않을까? ->이 정도 중복은 영향이 미미하다.
-    //리팩터링에 대한 성능 문제는 특별한 경우가 아니라면 일단 무시하라
-    function totalVolumeCredits(){
-      let result = 0;
-      //separate...
-      for (let perf of data.performances) {
-        //✨
-        result += amountFor(perf);
-      }
-      return result
-    }
+    
     
     function usd(aNumber){
       return new Intl.NumberFormat("en-Us", {
@@ -107,13 +115,7 @@ function statement(invoice, plays) {
       }).format(aNumber/100);
     }
     
-    function volumeCreditsFor(aPerformance) {
-      let result = 0;
-      result += Math.max(aPerformance.audience - 30, 0);
-      if ("comedy" == aPerformance.type)
-        result += Math.floor(aPerformance.audience / 5);
-      return result;
-    }
+    
   }
 }
 
