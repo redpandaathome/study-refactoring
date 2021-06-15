@@ -24,8 +24,33 @@ function statement(invoice, plays) {
 
   //✨ js shallow copy
   function enrichPerformance(aPerformance){
+    console.log("aPerf", aPerformance)
     const result = Object.assign({}, aPerformance)
     result.play = playFor(result);
+    result.amount = amountFor(result);
+    console.log("...", result)
+    return result;
+  }
+
+  function amountFor(aPerformance) {
+    let result = 0;
+    switch (aPerformance.play.type) {
+      case "tragedy":
+        result = 40000;
+        if (aPerformance.audience > 30) {
+          result += 1000 * (aPerformance.audience - 30);
+        }
+        break;
+      case "comedy":
+        result = 30000;
+        if (aPerformance.audience > 20) {
+          result += 500 * (aPerformance.audience - 20);
+        }
+        result += 300 * aPerformance.audience;
+        break;
+      default:
+        throw new Error(`알 수 없는 장르: ${aPerformance.play.type}`);
+    }
     return result;
   }
 
@@ -43,7 +68,7 @@ function statement(invoice, plays) {
       //   audience: 40,
       //   play: { name: 'Othello', type: 'tragedy' }
       // }
-      result += ` ${perf.play.name}: ${usd(amountFor(perf))} (${
+      result += ` ${perf.play.name}: ${usd(perf.amount)} (${
         perf.audience
       }석)\n`;
     }
@@ -52,27 +77,7 @@ function statement(invoice, plays) {
     result += `적립포인트: ${totalVolumeCredits()}점\n`;
     return result;
 
-    function amountFor(aPerformance) {
-      let result = 0;
-      switch (aPerformance.play.type) {
-        case "tragedy":
-          result = 40000;
-          if (aPerformance.audience > 30) {
-            result += 1000 * (aPerformance.audience - 30);
-          }
-          break;
-        case "comedy":
-          result = 30000;
-          if (aPerformance.audience > 20) {
-            result += 500 * (aPerformance.audience - 20);
-          }
-          result += 300 * aPerformance.audience;
-          break;
-        default:
-          throw new Error(`알 수 없는 장르: ${aPerformance.play.type}`);
-      }
-      return result;
-    }
+    
     
     function totalAmount(){
       let result = 0;
