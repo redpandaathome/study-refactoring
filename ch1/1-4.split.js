@@ -20,7 +20,28 @@ function statement(invoice, plays) {
   statementData.customer = invoice[0].customer;
   //✨instead of calling playFor()->middle data
   statementData.performances = invoice[0].performances.map(enrichPerformance);
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   return renderPlainText(statementData)
+
+  //반복문을 쪼개서 성능이 느려지지 않을까? ->이 정도 중복은 영향이 미미하다.
+  //리팩터링에 대한 성능 문제는 특별한 경우가 아니라면 일단 무시하라
+  function totalVolumeCredits(data){
+    let result = 0;
+    //separate...
+    for (let perf of data.performances) {
+      result += perf.volumeCredits;
+    }
+    return result
+  }
+
+  function totalAmount(data){
+    let result = 0;
+    for (let perf of data.performances) {
+      result += data.amount;
+    }
+    return result
+  }
 
   //✨ js shallow copy
   function enrichPerformance(aPerformance){
@@ -82,28 +103,11 @@ function statement(invoice, plays) {
       }석)\n`;
     }
   
-    result += `총액: ${usd(totalAmount())}`;
-    result += `적립포인트: ${totalVolumeCredits()}점\n`;
+    result += `총액: ${usd(data.totalAmount)}`;
+    result += `적립포인트: ${data.totalVolumeCredits}점\n`;
     return result;
 
-    //반복문을 쪼개서 성능이 느려지지 않을까? ->이 정도 중복은 영향이 미미하다.
-    //리팩터링에 대한 성능 문제는 특별한 경우가 아니라면 일단 무시하라
-    function totalVolumeCredits(){
-      let result = 0;
-      //separate...
-      for (let perf of data.performances) {
-        result += perf.volumeCredits;
-      }
-      return result
-    }
     
-    function totalAmount(){
-      let result = 0;
-      for (let perf of data.performances) {
-        result += amountFor(perf);
-      }
-      return result
-    }
     
     
     
