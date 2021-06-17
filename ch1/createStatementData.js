@@ -17,18 +17,7 @@ class PerformanceCalculator {
 
   //copied from function amountFor()
   get amount() {
-    console.log("this.performance: ", this.performance);
-    console.log("this.play: ", this.play);
-    let result = 0;
-    switch (this.play.type) {
-      case "tragedy":
-        throw "오류 발생!"; //비극 공연료는 TragedyCalculator를 이용하도록 유도
-      case "comedy":
-        throw "오류 발생!";
-      default:
-        throw new Error(`알 수 없는 장르: ${this.play.play.type}`);
-    }
-    return result;
+    throw new Error('서브 클래스에서 처리하도록 설계되었습니다.');
   }
 
   get volumeCredits() {
