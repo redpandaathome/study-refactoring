@@ -1,3 +1,9 @@
+class PerformanceCalculator {
+  constructor(aPerformance) {
+    this.performance = aPerformance;
+  }
+}
+
 export default function createStatementData(invoice, plays){
   const result = {};
   result.customer = invoice[0].customer;
@@ -7,6 +13,8 @@ export default function createStatementData(invoice, plays){
   return result;
 
   function enrichPerformance(aPerformance){
+    //공연료 계산기 생성
+    const calculator = new PerformanceCalculator(aPerformance);
     console.log("aPerf", aPerformance)
     const result = Object.assign({}, aPerformance)
     result.play = playFor(result);
