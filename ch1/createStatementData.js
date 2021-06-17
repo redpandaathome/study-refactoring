@@ -22,15 +22,9 @@ class PerformanceCalculator {
     let result = 0;
     switch (this.play.type) {
       case "tragedy":
-        throw '오류 발생!' //비극 공연료는 TragedyCalculator를 이용하도록 유도
-        break;
+        throw "오류 발생!"; //비극 공연료는 TragedyCalculator를 이용하도록 유도
       case "comedy":
-        result = 30000;
-        if (this.performance.audience > 20) {
-          result += 500 * (this.performance.audience - 20);
-        }
-        result += 300 * this.performance.audience;
-        break;
+        throw "오류 발생!";
       default:
         throw new Error(`알 수 없는 장르: ${this.play.play.type}`);
     }
@@ -49,17 +43,24 @@ class PerformanceCalculator {
 }
 
 class TragedyCalculator extends PerformanceCalculator {
-  get amount(){
+  get amount() {
     let result = 40000;
-      if (this.performance.audience > 30) {
-        result += 1000 * (this.performance.audience - 30);
-      }
-      return result;
+    if (this.performance.audience > 30) {
+      result += 1000 * (this.performance.audience - 30);
+    }
+    return result;
   }
 }
 
 class ComedyCalculator extends PerformanceCalculator {
-  
+  get amount() {
+    let result = 30000;
+    if (this.performance.audience > 20) {
+      result += 500 * (this.performance.audience - 20);
+    }
+    result += 300 * this.performance.audience;
+    return result;
+  }
 }
 
 export default function createStatementData(invoice, plays) {
