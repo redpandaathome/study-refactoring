@@ -27,20 +27,12 @@ function statement(invoice, plays) {
   //반복문을 쪼개서 성능이 느려지지 않을까? ->이 정도 중복은 영향이 미미하다.
   //리팩터링에 대한 성능 문제는 특별한 경우가 아니라면 일단 무시하라
   function totalVolumeCredits(data){
-    let result = 0;
-    //separate...
-    for (let perf of data.performances) {
-      result += perf.volumeCredits;
-    }
-    return result
+    return data.performances.reduce((total, p)=> total+p.volumeCredits ,0)
   }
 
   function totalAmount(data){
-    let result = 0;
-    for (let perf of data.performances) {
-      result += data.amount;
-    }
-    return result
+    //p58. 반복문을 파이프라인으로 바꾸기
+    return data.performances.reduce((total, p)=>{total+=p.amount, 0})
   }
 
   //✨ js shallow copy
