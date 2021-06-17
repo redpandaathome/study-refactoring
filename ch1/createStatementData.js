@@ -1,3 +1,6 @@
+function createPerfrmanceCalculator(aPerformance, aPlay) {
+  return new PerformanceCalculator(aPerformance, aPlay)
+}
 class PerformanceCalculator {
   constructor(aPerformance, aPlay) {
     this.performance = aPerformance;
@@ -32,7 +35,8 @@ class PerformanceCalculator {
 
   get volumeCredits(){
     let result = 0;
-    // 어째서 this.performance와 this.play를 혼용해서 쓸까? 이미 전자에 필요한 정보가 다 있는데?
+    // q1. 초반에 [0] 부분
+    // q2.어째서 this.performance와 this.play를 혼용해서 쓸까? 이미 전자에 필요한 정보가 다 있는데?
     result += Math.max(this.performance.audience - 30, 0);
     if ("comedy" == this.play.type)
       result += Math.floor(this.performance.audience / 5);
@@ -50,7 +54,7 @@ export default function createStatementData(invoice, plays){
 
   function enrichPerformance(aPerformance){
     //공연료 계산기 생성, 공연 정보를 계산기로 전달
-    const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
+    const calculator = new createPerfrmanceCalculator(aPerformance, playFor(aPerformance));
     console.log("aPerf", aPerformance)
     const result = Object.assign({}, aPerformance)
     result.play = calculator.play;
