@@ -8,5 +8,9 @@ describe('TEST START', function() {
        const asia = new Province(sampleProvinceData());
       assert.equal(asia.shortfall, 5);
     });
+    it('profit', function() {
+      const asia = new Province(sampleProvinceData());
+      assert.equal(asia.profit, 230);
+   });
   });
 });
