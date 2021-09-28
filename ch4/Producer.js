@@ -18,6 +18,7 @@ export class Producer {
     return this._production;
   }
   set production(amountStr) {
+    console.log(`set production amountStr:`, amountStr);
     const amount = parseInt(amountStr);
     const newProduction = Number.isNaN(amount) ? 0 : amount;
     this._province.totalProduction += newProduction - this._production;
